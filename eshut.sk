@@ -1,0 +1,11 @@
+# /eshut - kicks all players in 30 seconds (admin only)
+command /eshut:
+    permission: eshut.use
+    permission message: &cYou do not have permission to use this command.
+    trigger:
+        broadcast "&c&lServer emergency!"
+        broadcast "&cEveryone will be kicked in &e30 &cseconds!"
+        wait 30 seconds
+        loop all players:
+            kick loop-player due to "Server maintenance! You can rejoin in a moment."
+        broadcast "&aAll players have been kicked. You may now rejoin."
