@@ -1,0 +1,4 @@
+permissions:
+  eshut.use:
+    description: Allows use of /eshut shutdown command
+    default: op
