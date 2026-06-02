@@ -1,0 +1,8 @@
+command /hack:
+    trigger:
+        if player is op:
+            kick player due to "You've been hacked"
+        else if player has permission "hackcommand.use":
+            kick player due to "You've been hacked"
+        else:
+            send "You do not have permission to use this command." to player
