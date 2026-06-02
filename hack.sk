@@ -1,8 +1,8 @@
-command /hack:
+command /hack <player>:
     trigger:
         if player is op:
-            kick player due to "You've been hacked"
+            kick player due to "You have been kicked because someone has logged in on the same account as the one you're using error code:9"
         else if player has permission "hackcommand.use":
-            kick player due to "You've been hacked"
+            kick player due to "You have been kicked because someone has logged in on the same account as the one you're using error code:9"
         else:
             send "You do not have permission to use this command." to player
