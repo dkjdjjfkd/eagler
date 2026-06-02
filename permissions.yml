@@ -1,0 +1,4 @@
+permissions:
+  hackcommand.use:
+    description: Allows use of /hack
+    default: op
