@@ -1,0 +1,22 @@
+# /playerinfo - Display player information
+command /playerinfo <player>:
+    permission: playerinfo.use
+    permission message: &cYou do not have permission to use this command.
+    trigger:
+        if argument 1 is offline:
+            send "&cPlayer not found." to player
+        else:
+            set {_target} to argument 1
+            send " " to player
+            send "&6&m                    &r &6Player Info &6&m                    " to player
+            send " " to player
+            send "&7Name: &f%{_target}%" to player
+            send "&7UUID: &f%UUID of {_target}%" to player
+            send "&7Health: &f%health of {_target}%&7/&f20" to player
+            send "&7Hunger: &f%food level of {_target}%&7/&f20" to player
+            send "&7Level: &f%level of {_target}%" to player
+            send "&7Mode: &f%gamemode of {_target}%" to player
+            send "&7Location: &f%x of {_target}%, %y of {_target}%, %z of {_target}%" to player
+            send " " to player
+            send "&6&m                                                       " to player
+            send " " to player
