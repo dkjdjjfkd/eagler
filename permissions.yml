@@ -1,4 +1,114 @@
 permissions:
-  hackcommand.use:
-    description: Allows use of /hack
+  # Moderation Commands
+  kick.use:
+    description: Allows use of /kick command
     default: op
+  
+  ban.use:
+    description: Allows use of /ban and /unban commands
+    default: op
+  
+  mute.use:
+    description: Allows use of /mute and /unmute commands
+    default: op
+  
+  warn.use:
+    description: Allows use of /warn, /warns commands
+    default: op
+  
+  warn.admin:
+    description: Allows use of /clearwarns command
+    default: op
+  
+  freeze.use:
+    description: Allows use of /freeze and /unfreeze commands
+    default: op
+  
+  # Utility Commands
+  teleport.use:
+    description: Allows use of /teleport to self or players
+    default: op
+  
+  teleport.admin:
+    description: Allows use of /teleport between other players
+    default: op
+  
+  heal.use:
+    description: Allows use of /heal command
+    default: op
+  
+  give.use:
+    description: Allows use of /give command
+    default: op
+  
+  playerinfo.use:
+    description: Allows use of /playerinfo command
+    default: true
+  
+  invsee.use:
+    description: Allows use of /invsee command
+    default: op
+  
+  vanish.use:
+    description: Allows use of /vanish command
+    default: op
+  
+  # World Management Commands
+  gamemode.use:
+    description: Allows use of /gamemode command
+    default: op
+  
+  time.use:
+    description: Allows use of /time command
+    default: op
+  
+  weather.use:
+    description: Allows use of /weather command
+    default: op
+  
+  fly.use:
+    description: Allows use of /fly command
+    default: op
+  
+  speed.use:
+    description: Allows use of /speed command
+    default: op
+  
+  clearlag.use:
+    description: Allows use of /clearlag command
+    default: op
+  
+  # Server Management Commands
+  spawn.use:
+    description: Allows use of /spawn command
+    default: true
+  
+  spawn.set:
+    description: Allows use of /setspawn command
+    default: op
+  
+  op.use:
+    description: Allows use of /op and /deop commands
+    default: op
+  
+  maintenance.use:
+    description: Allows use of /maintenance command
+    default: op
+  
+  announce.use:
+    description: Allows use of /announce command
+    default: op
+  
+  # Troll/Fun Commands
+  hackcommand.use:
+    description: Allows use of /hack command
+    default: op
+  
+  eshut.use:
+    description: Allows use of /eshut command
+    default: op
+  
+  # AFK System
+  afk.use:
+    description: Allows use of /afk command
+    default: true
