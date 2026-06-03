@@ -1,0 +1,4 @@
+permissions:
+  ban.use:
+    description: Allows use of /ban
+    default: op
