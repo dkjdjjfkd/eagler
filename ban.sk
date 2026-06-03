@@ -1,0 +1,35 @@
+# /ban - Ban a player from the server
+command /ban <player> <text>:
+    permission: ban.use
+    permission message: &cYou do not have permission to use this command.
+    trigger:
+        set {_target} to argument 1
+        set {_reason} to argument 2
+        if {banned.%{_target}%} is true:
+            send "&cThis player is already banned." to player
+        else:
+            set {banned.%{_target}%} to true
+            set {ban.reason.%{_target}%} to {_reason}
+            set {ban.date.%{_target}%} to now
+            if {_target} is online:
+                kick {_target} due to "&cYou have been banned!&r%nl%%nl%&7Reason: %{_reason}%"
+            broadcast "&c%{_target}% has been banned. &7Reason: %{_reason}%"
+            send "&aBanned %{_target}% for: %{_reason}%" to player
+
+on join:
+    if {banned.%player%} is true:
+        kick player due to "&cYou are banned from this server!&r%nl%%nl%&7Reason: %{ban.reason.%player%}%"
+
+command /unban <player>:
+    permission: ban.use
+    permission message: &cYou do not have permission to use this command.
+    trigger:
+        set {_target} to argument 1
+        if {banned.%{_target}%} is not true:
+            send "&cThis player is not banned." to player
+        else:
+            delete {banned.%{_target}%}
+            delete {ban.reason.%{_target}%}
+            delete {ban.date.%{_target}%}
+            send "&a%{_target}% has been unbanned." to player
+            broadcast "&a%{_target}% has been unbanned."
