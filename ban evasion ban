@@ -1,0 +1,13 @@
+command /ban <player>:
+    permission: ban.use
+    permission message: &cYou do not have permission to use this command.
+    trigger:
+        set {_target} to arg-1
+
+        if {_target} is not online:
+            send "&cThat player is not online." to player
+            stop
+
+        kick {_target} due to "You have been permanently banned for ban evasion. Attempting to bypass an existing punishment by joining on alternate accounts or shared logins is strictly against our rules. All related accounts, current sessions, and future connections from this identity are now blocked from the server. If you believe this decision is incorrect, you may submit a detailed appeal with clear evidence and wait patiently for staff review."
+
+        send "&aYou banned &e%{_target}% &afor ban evasion." to player
