@@ -1,0 +1,97 @@
+# Sidebar UI Display for Eagler Server
+# Shows server info, player balance, and playtime
+# Author: Server Development
+
+options:
+	server_owner: Eliplayz2much
+	server_ip: TeapTeepCheap.eagler.host
+	update_interval: 1 second
+
+# Initialize player data on join
+on join:
+	if {playtime::%player's uuid%} is not set:
+		set {playtime::%player's uuid%} to 0
+	if {balance::%player's uuid%} is not set:
+		set {balance::%player's uuid%} to 0
+	update sidebar for player
+
+# Update sidebar every interval
+every {@update_interval}:
+	loop all players:
+		update sidebar for loop-player
+
+# Function to update the sidebar
+function update sidebar for player:
+	set {_playtime} to {playtime::%arg-1's uuid%}
+	set {_balance} to {balance::%arg-1's uuid%}
+	set {_hours} to floor({_playtime} / 3600)
+	set {_minutes} to floor(({_playtime} mod 3600) / 60)
+	
+	set sidebar of arg-1 to:
+		"&6&lTeapTeep Server"
+		"&r"
+		"&7Owner: &f{@server_owner}"
+		"&7IP: &f{@server_ip}"
+		"&r"
+		"&7Balance:"
+		"&a${%{_balance}%}"
+		"&r"
+		"&7Playtime:"
+		"&b%{_hours}%h %{_minutes}%m"
+		"&r"
+		"&7Players: &f%number of all players%"
+
+# Track playtime (increases every 20 seconds = 1 game minute)
+every 20 seconds:
+	loop all players:
+		add 20 to {playtime::%loop-player's uuid%}
+
+# Command to set player balance (admin only)
+command /setbalance [<player>] [<number>]:
+	permission: server.admin
+	permission message: &cYou don't have permission!
+	trigger:
+		if arg-1 is not set:
+			send "&cUsage: /setbalance <player> <amount>"
+			stop
+		if arg-2 is not set:
+			send "&cUsage: /setbalance <player> <amount>"
+			stop
+		set {balance::%arg-1's uuid%} to arg-2
+		send "&aSet %arg-1%'s balance to $%arg-2%"
+		send "&aYour balance was updated to $%arg-2%" to arg-1
+
+# Command to add balance
+command /addbalance [<player>] [<number>]:
+	permission: server.admin
+	permission message: &cYou don't have permission!
+	trigger:
+		if arg-1 is not set:
+			send "&cUsage: /addbalance <player> <amount>"
+			stop
+		if arg-2 is not set:
+			send "&cUsage: /addbalance <player> <amount>"
+			stop
+		add arg-2 to {balance::%arg-1's uuid%}
+		send "&aAdded $%arg-2% to %arg-1%'s balance (now: $%{balance::%arg-1's uuid%}%)"
+		send "&a$%arg-2% was added to your balance (now: $%{balance::%arg-1's uuid%}%)" to arg-1
+
+# Command to check your balance
+command /balance:
+	trigger:
+		send "&6=== Your Balance ==="
+		send "&aBalance: &f$%{balance::%player's uuid%}%"
+		send "&aPlaytime: &f%floor({playtime::%player's uuid%} / 3600)%h"
+
+# Command to check playtime
+command /playtime [<player>]:
+	trigger:
+		if arg-1 is not set:
+			set {_player} to player
+		else:
+			set {_player} to arg-1
+		set {_playtime} to {playtime::%{_player}'s uuid%}
+		set {_hours} to floor({_playtime} / 3600)
+		set {_minutes} to floor(({_playtime} mod 3600) / 60)
+		send "&6=== Playtime for %{_player}% ==="
+		send "&a%{_hours}% hours and %{_minutes}% minutes"
