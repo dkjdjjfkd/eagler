@@ -27,19 +27,32 @@ function update_sidebar(p: player):
 	set {_hours} to floor({_playtime} / 3600)
 	set {_mins} to floor(({_playtime} - ({_hours} * 3600)) / 60)
 	
-	set sidebar of {_p} to:
-		"&6&lTeapTeep Server"
-		"&r"
-		"&7Owner: &f{@server_owner}"
-		"&7IP: &f{@server_ip}"
-		"&r"
-		"&7Balance:"
-		"&a${%{_balance}%}"
-		"&r"
-		"&7Playtime:"
-		"&b%{_hours}%h %{_mins}%m"
-		"&r"
-		"&7Players: &f%number of all players%"
+	set {_line1} to "&6&lTeapTeep Server"
+	set {_line2} to "&r"
+	set {_line3} to "&7Owner: &f{@server_owner}"
+	set {_line4} to "&7IP: &f{@server_ip}"
+	set {_line5} to "&r"
+	set {_line6} to "&7Balance:"
+	set {_line7} to "&a${%{_balance}%}"
+	set {_line8} to "&r"
+	set {_line9} to "&7Playtime:"
+	set {_line10} to "&b%{_hours}%h %{_mins}%m"
+	set {_line11} to "&r"
+	set {_line12} to "&7Players: &f%number of all players%"
+	
+	set the sidebar of {_p} to:
+		{_line1}
+		{_line2}
+		{_line3}
+		{_line4}
+		{_line5}
+		{_line6}
+		{_line7}
+		{_line8}
+		{_line9}
+		{_line10}
+		{_line11}
+		{_line12}
 
 # Track playtime (increases every 1 second)
 every 1 second:
