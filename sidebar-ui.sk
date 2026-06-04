@@ -13,21 +13,21 @@ on join:
 		set {playtime::%player's uuid%} to 0
 	if {balance::%player's uuid%} is not set:
 		set {balance::%player's uuid%} to 0
-	update sidebar for player
+	update_sidebar(player)
 
 # Update sidebar every interval
 every {@update_interval}:
 	loop all players:
-		update sidebar for loop-player
+		update_sidebar(loop-player)
 
 # Function to update the sidebar
-function update sidebar for player:
-	set {_playtime} to {playtime::%arg-1's uuid%}
-	set {_balance} to {balance::%arg-1's uuid%}
+function update_sidebar(p: player):
+	set {_playtime} to {playtime::%{_p}'s uuid%}
+	set {_balance} to {balance::%{_p}'s uuid%}
 	set {_hours} to floor({_playtime} / 3600)
-	set {_minutes} to floor(({_playtime} mod 3600) / 60)
+	set {_mins} to floor(({_playtime} - ({_hours} * 3600)) / 60)
 	
-	set sidebar of arg-1 to:
+	set sidebar of {_p} to:
 		"&6&lTeapTeep Server"
 		"&r"
 		"&7Owner: &f{@server_owner}"
@@ -37,14 +37,14 @@ function update sidebar for player:
 		"&a${%{_balance}%}"
 		"&r"
 		"&7Playtime:"
-		"&b%{_hours}%h %{_minutes}%m"
+		"&b%{_hours}%h %{_mins}%m"
 		"&r"
 		"&7Players: &f%number of all players%"
 
-# Track playtime (increases every 20 seconds = 1 game minute)
-every 20 seconds:
+# Track playtime (increases every 1 second)
+every 1 second:
 	loop all players:
-		add 20 to {playtime::%loop-player's uuid%}
+		add 1 to {playtime::%loop-player's uuid%}
 
 # Command to set player balance (admin only)
 command /setbalance [<player>] [<number>]:
@@ -81,7 +81,9 @@ command /balance:
 	trigger:
 		send "&6=== Your Balance ==="
 		send "&aBalance: &f$%{balance::%player's uuid%}%"
-		send "&aPlaytime: &f%floor({playtime::%player's uuid%} / 3600)%h"
+		set {_playtime} to {playtime::%player's uuid%}
+		set {_hours} to floor({_playtime} / 3600)
+		send "&aPlaytime: &f%{_hours}%h"
 
 # Command to check playtime
 command /playtime [<player>]:
@@ -92,6 +94,6 @@ command /playtime [<player>]:
 			set {_player} to arg-1
 		set {_playtime} to {playtime::%{_player}'s uuid%}
 		set {_hours} to floor({_playtime} / 3600)
-		set {_minutes} to floor(({_playtime} mod 3600) / 60)
+		set {_mins} to floor(({_playtime} - ({_hours} * 3600)) / 60)
 		send "&6=== Playtime for %{_player}% ==="
-		send "&a%{_hours}% hours and %{_minutes}% minutes"
+		send "&a%{_hours}% hours and %{_mins}% minutes"
