@@ -1,4 +1,4 @@
-command /ban <player>:
+command /banev <player>:
     permission: ban.use
     permission message: &cYou do not have permission to use this command.
     trigger:
