@@ -20,16 +20,25 @@ every {@update_interval}:
 	loop all players:
 		update_sidebar(loop-player)
 
-# Function to update the sidebar
+# Function to update the sidebar using scoreboard
 function update_sidebar(p: player):
 	set {_playtime} to {playtime::%{_p}'s uuid%}
 	set {_balance} to {balance::%{_p}'s uuid%}
 	set {_hours} to floor({_playtime} / 3600)
 	set {_mins} to floor(({_playtime} - ({_hours} * 3600)) / 60)
 	
-	set sidebar title of {_p} to "&6&lTeapTeep Server"
+	create scoreboard "teapteep":
+		set display name of scoreboard "teapteep" to "&6&lTeapTeep Server"
+		set score "&7Owner: &f{@server_owner}" in scoreboard "teapteep" to 8
+		set score "&7IP: &f{@server_ip}" in scoreboard "teapteep" to 7
+		set score " " in scoreboard "teapteep" to 6
+		set score "&7Balance:" in scoreboard "teapteep" to 5
+		set score "&a${%{_balance}%}" in scoreboard "teapteep" to 4
+		set score "  " in scoreboard "teapteep" to 3
+		set score "&7Playtime:" in scoreboard "teapteep" to 2
+		set score "&b%{_hours}%h %{_mins}%m" in scoreboard "teapteep" to 1
 	
-	set {_sidebar} to "&7Owner: &f{@server_owner}||&7IP: &f{@server_ip}||&r||&7Balance: &a${%{_balance}%}||&7Playtime: &b%{_hours}%h %{_mins}%m||&r||&7Players: &f%number of all players%"
+	set {_p}'s sidebar to scoreboard "teapteep"
 
 # Track playtime (increases every 1 second)
 every 1 second:
