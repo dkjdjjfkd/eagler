@@ -1,0 +1,40 @@
+# /mute - Silence a player temporarily
+command /mute <player> <number>:
+    permission: mute.use
+    permission message: &cYou do not have permission to use this command.
+    trigger:
+        set {_target} to argument 1
+        set {_duration} to argument 2
+        if {muted.%{_target}%} is true:
+            send "&cThis player is already muted." to player
+        else:
+            set {muted.%{_target}%} to true
+            set {mute.duration.%{_target}%} to {_duration}
+            set {mute.time.%{_target}%} to now
+            broadcast "&e%{_target}% has been muted for %{_duration}% seconds."
+            send "&aYou muted %{_target}% for %{_duration}% seconds." to player
+            wait {_duration} seconds
+            delete {muted.%{_target}%}
+            delete {mute.duration.%{_target}%}
+            delete {mute.time.%{_target}%}
+            if {_target} is online:
+                send "&aYour mute has expired." to {_target}
+
+on chat:
+    if {muted.%player%} is true:
+        cancel event
+        send "&cYou are currently muted." to player
+
+command /unmute <player>:
+    permission: mute.use
+    permission message: &cYou do not have permission to use this command.
+    trigger:
+        set {_target} to argument 1
+        if {muted.%{_target}%} is not true:
+            send "&cThis player is not muted." to player
+        else:
+            delete {muted.%{_target}%}
+            delete {mute.duration.%{_target}%}
+            delete {mute.time.%{_target}%}
+            send "&a%{_target}% has been unmuted." to player
+            broadcast "&a%{_target}% has been unmuted."
