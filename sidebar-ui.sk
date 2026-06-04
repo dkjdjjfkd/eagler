@@ -5,7 +5,6 @@
 options:
 	server_owner: Eliplayz2much
 	server_ip: TeapTeepCheap.eagler.host
-	update_interval: 1 second
 
 # Initialize player data on join
 on join:
@@ -13,37 +12,19 @@ on join:
 		set {playtime::%player's uuid%} to 0
 	if {balance::%player's uuid%} is not set:
 		set {balance::%player's uuid%} to 0
-	update_sidebar(player)
 
-# Update sidebar every interval
-every {@update_interval}:
-	loop all players:
-		update_sidebar(loop-player)
-
-# Function to update the sidebar using scoreboard
-function update_sidebar(p: player):
-	set {_playtime} to {playtime::%{_p}'s uuid%}
-	set {_balance} to {balance::%{_p}'s uuid%}
-	set {_hours} to floor({_playtime} / 3600)
-	set {_mins} to floor(({_playtime} - ({_hours} * 3600)) / 60)
-	
-	create scoreboard "teapteep":
-		set display name of scoreboard "teapteep" to "&6&lTeapTeep Server"
-		set score "&7Owner: &f{@server_owner}" in scoreboard "teapteep" to 8
-		set score "&7IP: &f{@server_ip}" in scoreboard "teapteep" to 7
-		set score " " in scoreboard "teapteep" to 6
-		set score "&7Balance:" in scoreboard "teapteep" to 5
-		set score "&a${%{_balance}%}" in scoreboard "teapteep" to 4
-		set score "  " in scoreboard "teapteep" to 3
-		set score "&7Playtime:" in scoreboard "teapteep" to 2
-		set score "&b%{_hours}%h %{_mins}%m" in scoreboard "teapteep" to 1
-	
-	set {_p}'s sidebar to scoreboard "teapteep"
-
-# Track playtime (increases every 1 second)
+# Update sidebar every second
 every 1 second:
 	loop all players:
-		add 1 to {playtime::%loop-player's uuid%}
+		set {_p} to loop-player
+		set {_playtime} to {playtime::%{_p}'s uuid%}
+		set {_balance} to {balance::%{_p}'s uuid%}
+		set {_hours} to floor({_playtime} / 3600)
+		set {_mins} to floor(({_playtime} - ({_hours} * 3600)) / 60)
+		
+		set title of {_p} to "&6&lTeapTeep Server" with subtitle "&7Owner: &f{@server_owner} &7| IP: &f{@server_ip}"
+		
+		add 1 to {playtime::%{_p}'s uuid%}
 
 # Command to set player balance (admin only)
 command /setbalance [<player>] [<number>]:
@@ -59,7 +40,6 @@ command /setbalance [<player>] [<number>]:
 		set {balance::%arg-1's uuid%} to arg-2
 		send "&aSet %arg-1%'s balance to $%arg-2%"
 		send "&aYour balance was updated to $%arg-2%" to arg-1
-		update_sidebar(arg-1)
 
 # Command to add balance
 command /addbalance [<player>] [<number>]:
@@ -73,9 +53,9 @@ command /addbalance [<player>] [<number>]:
 			send "&cUsage: /addbalance <player> <amount>"
 			stop
 		add arg-2 to {balance::%arg-1's uuid%}
-		send "&aAdded $%arg-2% to %arg-1%'s balance (now: $%{balance::%arg-1's uuid%}%)"
-		send "&a$%arg-2% was added to your balance (now: $%{balance::%arg-1's uuid%}%)" to arg-1
-		update_sidebar(arg-1)
+		set {_new_balance} to {balance::%arg-1's uuid%}
+		send "&aAdded $%arg-2% to %arg-1%'s balance (now: $%{_new_balance}%)"
+		send "&a$%arg-2% was added to your balance (now: $%{_new_balance}%)" to arg-1
 
 # Command to check your balance
 command /balance:
@@ -84,7 +64,8 @@ command /balance:
 		send "&aBalance: &f$%{balance::%player's uuid%}%"
 		set {_playtime} to {playtime::%player's uuid%}
 		set {_hours} to floor({_playtime} / 3600)
-		send "&aPlaytime: &f%{_hours}%h"
+		set {_mins} to floor(({_playtime} - ({_hours} * 3600)) / 60)
+		send "&aPlaytime: &f%{_hours}%h %{_mins}%m"
 
 # Command to check playtime
 command /playtime [<player>]:
